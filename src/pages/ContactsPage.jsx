@@ -18,6 +18,12 @@ import {
   Spinner,
   Alert,
   AlertIcon,
+  Table,
+  Tr,
+  Td,
+  Tbody,
+  Th,
+  Thead,
 } from '@chakra-ui/react';
 
 export const ContactsPage = () => {
@@ -25,6 +31,7 @@ export const ContactsPage = () => {
   const isLoading = useSelector(selectIsLoading);
   const error = useSelector(selectError);
   const filter = useSelector(selectFilter);
+  const userDetails = useSelector(state => state.auth.user);
 
   const dispatch = useDispatch();
 
@@ -46,13 +53,32 @@ export const ContactsPage = () => {
 
   return (
     <Box p={5}>
-      <Heading mb={4}>Phonebook</Heading>
-      <ContactForm addContact={handleAddContact} contacts={visibleContacts} />
+      {userDetails && (
+        <Table variant="simple">
+          <Thead>
+            <Tr>
+              <Th>Name</Th>
+              <Th>Email</Th>
+              <Th>Currency</Th>
+              <Th>Total Expenses</Th>
+              <Th>Total Incomes</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            <Tr>
+              <Td>{userDetails.name}</Td>
+              <Td>{userDetails.email}</Td>
+              <Td>{userDetails.currency}</Td>
+              <Td>{userDetails.transactionsTotal?.expenses || 0}</Td>
+              <Td>{userDetails.transactionsTotal?.incomes || 0}</Td>
+            </Tr>
+          </Tbody>
+        </Table>
+      )}
 
-      <Heading as="h2" size="lg" mt={8} mb={4}>
-        Contacts
-      </Heading>
-      <Filter filter={filter} setFilter={handleSetFilter} />
+      {/* <ContactForm addContact={handleAddContact} contacts={visibleContacts} /> */}
+
+      {/* <Filter filter={filter} setFilter={handleSetFilter} /> */}
 
       {isLoading && (
         <Box display="flex" alignItems="center" mt={4}>
@@ -68,12 +94,12 @@ export const ContactsPage = () => {
         </Alert>
       )}
 
-      {visibleContacts && (
+      {/* {visibleContacts && (
         <ContactList
           contacts={visibleContacts}
           deleteContact={handleDeleteContact}
         />
-      )}
+      )} */}
     </Box>
   );
 };

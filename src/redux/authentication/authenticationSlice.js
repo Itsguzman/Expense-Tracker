@@ -8,7 +8,7 @@ import {
 
 const initialState = {
   user: null,
-  token: null,
+  accessToken: null, // Renamed from token to be more specific
   isLoggedIn: false,
   isLoading: false,
   error: null,
@@ -22,7 +22,7 @@ const authSlice = createSlice({
     builder
       .addCase(register.fulfilled, (state, action) => {
         state.user = action.payload.user;
-        state.token = action.payload.token;
+        state.accessToken = action.payload.accessToken; // Store accessToken
         state.isLoggedIn = true;
         state.error = null;
       })
@@ -32,7 +32,7 @@ const authSlice = createSlice({
       })
       .addCase(logIn.fulfilled, (state, action) => {
         state.user = action.payload.user;
-        state.token = action.payload.token;
+        state.accessToken = action.payload.accessToken; // Store accessToken
         state.isLoggedIn = true;
         state.isLoading = false;
         state.error = null;
@@ -43,7 +43,7 @@ const authSlice = createSlice({
       })
       .addCase(logOut.fulfilled, state => {
         state.user = null;
-        state.token = null;
+        state.accessToken = null; // Clear accessToken on logout
         state.isLoggedIn = false;
         state.error = null;
       })

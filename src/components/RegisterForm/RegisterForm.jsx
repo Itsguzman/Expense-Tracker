@@ -2,14 +2,6 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { register } from '../../redux/authentication/authenticationOperation';
 import { NavLink } from 'react-router-dom';
-import {
-  Heading,
-  Box,
-  Button,
-  FormControl,
-  FormLabel,
-  Input,
-} from '@chakra-ui/react';
 
 export const RegisterForm = () => {
   const dispatch = useDispatch();
@@ -17,48 +9,55 @@ export const RegisterForm = () => {
   const handleSubmit = e => {
     e.preventDefault();
     const form = e.currentTarget;
-    dispatch(
-      register({
-        name: form.elements.name.value,
-        email: form.elements.email.value,
-        password: form.elements.password.value,
-      })
-    );
+
+    // Extract values from form fields
+    const name = form.elements.name.value;
+    const email = form.elements.email.value;
+    const password = form.elements.password.value;
+
+    if (!name || !email || !password) {
+      alert('All fields are required.');
+      return;
+    }
+
+    // Dispatch register action
+    dispatch(register({ name, email, password }));
     form.reset();
   };
 
   return (
-    <Box
-      as="form"
-      onSubmit={handleSubmit}
-      autoComplete="off"
-      maxW="sm"
-      mx="auto"
-      mt={10}
-      p={6}
-      borderWidth={1}
-      borderRadius="md"
-      boxShadow="lg"
-    >
-      <Heading>Create Account</Heading>
-      <FormControl id="name" mb={4} isRequired>
-        <FormLabel>Username</FormLabel>
-        <Input type="text" name="name" placeholder="Username" />
-      </FormControl>
-      <FormControl id="email" mb={4} isRequired>
-        <FormLabel>Email</FormLabel>
-        <Input type="email" name="email" placeholder="Email" />
-      </FormControl>
-      <FormControl id="password" mb={4} isRequired>
-        <FormLabel>Password</FormLabel>
-        <Input type="password" name="password" placeholder="Password" />
-      </FormControl>
-      <Button type="submit" colorScheme="teal" width="full">
-        Register
-      </Button>
-      <Button as={NavLink} to="/login" colorScheme="green" width="full" mt={4}>
-        Back to Login
-      </Button>
-    </Box>
+    <form onSubmit={handleSubmit}>
+      <label htmlFor="name">Username</label>
+      <input
+        type="text"
+        id="name"
+        name="name"
+        placeholder="Username"
+        required
+      />
+
+      <label htmlFor="email">Email</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        placeholder="Email"
+        required
+      />
+
+      <label htmlFor="password">Password</label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        placeholder="Password"
+        required
+      />
+
+      <button type="submit">Register</button>
+      <NavLink to="/login">
+        <button type="button">Back to Login</button>
+      </NavLink>
+    </form>
   );
 };
